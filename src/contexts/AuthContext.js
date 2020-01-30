@@ -16,7 +16,9 @@ export class AuthContextProvider extends React.Component {
 
     logout = () => {
         TweethackService.logout()
-            .then(() => this.setUser())
+            .then(() => 
+            this.setUser()
+            )
     }
 
     render() {

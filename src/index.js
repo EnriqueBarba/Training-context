@@ -4,10 +4,14 @@ import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 import {BrowserRouter as Router} from 'react-router-dom'
+import 'bootstrap/dist/css/bootstrap.min.css'
+import { AuthContextProvider } from './contexts/AuthContext';
 
 ReactDOM.render(
     <Router>
+        <AuthContextProvider>
         <App />
+        </AuthContextProvider>
     </Router>
     , document.getElementById('root'));
 

@@ -6,6 +6,7 @@ const http = axios.create({
 })
 
 const login = (obj) => http.post("/login",obj).then(data => data)
-//const login = (obj) => http.post("",obj).then(data => data)
+const logout = () => http.post("/logout").then(data => data)
+const register = (data) => http.post('/users', data)
 
-export default {login}
+export default {login, logout, register}

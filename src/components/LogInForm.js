@@ -1,15 +1,20 @@
 import React from 'react'
+import { WithAuthConsumer } from '../contexts/AuthContext'
+import TweethackService from '../services/TweethackService'
+import { Redirect } from 'react-router-dom'
 
 class LogInForm extends React.Component {
     
     state={
         data:{
-            username:'',
+            email:'',
             password:''
-        }
+        },
+        error:false,
+        loading:false
     }
 
-    handeChange = (e) => {
+    handleChange = (e) => {
         const {name, value} = e.target
         this.setState({
             data:{
@@ -22,24 +27,41 @@ class LogInForm extends React.Component {
     handleSubmit = (e) => {
         
         e.preventDefault();
-        alert('SUBMIT!')
+        TweethackService.login({...this.state.data})
+            .then((user) => {
+                this.props.setUser(user)
+            },
+            () => {
+                this.setState({error:true, loading:false})
+            })
         
     }
 
 
     render() {
         const data = this.state.data
+        //const errorClassName = this.state.error ? 'is-invalid' : ''
+
+        if (this.props.currentUser) {
+            return <Redirect to="/"/>
+          }
+
         return(
-            <div className="LogInForm" >
+            <div className="LogInForm p-4" >
                 <form onSubmit={this.handleSubmit}>
-                    <label>Username: </label><input onChange={this.handeChange} type="text" name="username" value={data.username}/><br/>
-                    <label>Password: </label><input onChange={this.handeChange} type="password" name="password" value={data.password}/><br/>
-                    <button type="submit">Login</button>
+                    <div className="form-group">
+                        <label>Email: </label>
+                        <input className="form-control" onChange={this.handleChange} type="text" name="email" value={data.email}/><br/>
+                    </div>
+                    <div className="form-group">
+                        <label>Password: </label>
+                        <input className="form-control" onChange={this.handleChange} type="password" name="password" value={data.password}/><br/>
+                    </div>
+                    <button className="btn btn-info" type="submit">Login</button>
                 </form>
-                {JSON.stringify(this.state.data)}
             </div>
         )
     }
 }
 
-export default LogInForm
+export default WithAuthConsumer(LogInForm)
